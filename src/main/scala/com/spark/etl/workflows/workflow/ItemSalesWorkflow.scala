@@ -1,8 +1,8 @@
 package com.spark.etl.workflows.workflow
 
-import com.spark.etl.workflows.components.extractors.{SalesExtractor, ItemExtractor}
-import com.spark.etl.workflows.components.transformers.ItemSalesTransformer
+import com.spark.etl.workflows.components.extractors.{ItemExtractor, SalesExtractor}
 import com.spark.etl.workflows.components.loaders.ItemSalesLoader
+import com.spark.etl.workflows.components.transformers.ItemSalesTransformer
 
 object ItemSalesWorkflow extends WorkFlowTrait {
 

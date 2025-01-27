@@ -1,9 +1,9 @@
 package com.spark.etl.utils
 
-import SparkIOUtil.spark
-import org.apache.log4j.Logger
-import org.apache.spark.sql.{DataFrame, SQLContext, SQLImplicits, SaveMode, SparkSession}
+import com.spark.etl.utils.SparkIOUtil.spark
 import com.spark.etl.utils.{StringConstantsUtil => StrConst}
+import org.apache.log4j.Logger
+import org.apache.spark.sql._
 
 import scala.annotation.unused
 
@@ -12,9 +12,9 @@ object SparkIOUtil {
 
   val log: Logger = Logger.getLogger(this.getClass.getName)
 
-  var spark :SparkSession = _
+  var spark: SparkSession = _
 
-  def configureSpark(configMap : Map[String,Any]):Unit={
+  def configureSpark(configMap: Map[String, Any]): Unit = {
 
     val appName = configMap(StrConst.WORKFLOW).toString
     val master = configMap(StrConst.MASTER).toString
@@ -27,7 +27,7 @@ object SparkIOUtil {
       case _ => sparkSession.enableHiveSupport()
     }
 
-    for((key, value) <- configMap.-(StrConst.WORKFLOW).-(StrConst.MASTER)) {
+    for ((key, value) <- configMap.-(StrConst.WORKFLOW).-(StrConst.MASTER)) {
 
       value match {
         case bool: Boolean =>
@@ -54,17 +54,17 @@ object SparkIOUtil {
   }
 
   @unused
-  def getSparkSession:SparkSession = spark
+  def getSparkSession: SparkSession = spark
 
 
   @unused
-  def execute(sql:String):Unit={
+  def execute(sql: String): Unit = {
     log.debug("Executing SQL = " + sql)
     println("Executing SQL = " + sql)
     spark.sql(sql).collect()
   }
 
-  def writeOrc(df:DataFrame,mode:SaveMode,tableName:String, partition:Option[String]):Unit = {
+  def writeOrc(df: DataFrame, mode: SaveMode, tableName: String, partition: Option[String]): Unit = {
     partition match {
       case Some(x) => df.write.mode(mode).format("orc").partitionBy(x).saveAsTable(tableName)
 
@@ -73,32 +73,31 @@ object SparkIOUtil {
   }
 
   @unused
-  def fetch(sql:String):DataFrame={
+  def fetch(sql: String): DataFrame = {
     log.debug("Executing SQL = " + sql)
     println("fetch SQL = " + sql)
     spark.sql(sql)
   }
 
-  def read(fileName:String):DataFrame = {
+  def read(fileName: String): DataFrame = {
     spark.read.option("header", "true").csv(fileName)
   }
 
   @unused
-  def isTableExists(database:String, tableName:String):Boolean={
+  def isTableExists(database: String, tableName: String): Boolean = {
     spark.catalog.tableExists(database + "." + tableName)
 
   }
 
   @unused
-  def refreshMetaData(schema:String, table:String):Unit={
+  def refreshMetaData(schema: String, table: String): Unit = {
     spark.catalog.refreshTable(schema + "." + table)
   }
 
 
-
   @unused
-  def buildTempDF():DataFrame = {
-    val rdd = spark.sparkContext.parallelize(List(1,2,3))
+  def buildTempDF(): DataFrame = {
+    val rdd = spark.sparkContext.parallelize(List(1, 2, 3))
     import SparkImplicits._
     rdd.toDF()
   }

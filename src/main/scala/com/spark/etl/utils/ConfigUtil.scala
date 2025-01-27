@@ -12,7 +12,7 @@ object ConfigUtil {
 
   private val logger = Logger.getLogger(this.getClass.getName)
 
-  def getGlobalConfig(runMode:Option[Any]) : mutable.Map[String, AnyRef] = {
+  def getGlobalConfig(runMode: Option[Any]): mutable.Map[String, AnyRef] = {
 
     logger.debug("Running ->" + runMode.getOrElse(StringConstantsUtil.LOCAL).toString.toUpperCase())
 
@@ -20,36 +20,36 @@ object ConfigUtil {
 
     val itr = confObj.unwrapped().entrySet().iterator()
 
-    val confMap:mutable.Map[String, AnyRef] = mutable.Map[String, AnyRef]()
+    val confMap: mutable.Map[String, AnyRef] = mutable.Map[String, AnyRef]()
 
-    while(itr.hasNext) {
+    while (itr.hasNext) {
       val e = itr.next()
       confMap.put(e.getKey, e.getValue)
     }
     confMap
   }
 
-  def getAppConfig(appName:String) : mutable.Map[String, AnyRef] = {
+  def getAppConfig(appName: String): mutable.Map[String, AnyRef] = {
 
-    val confMap:mutable.Map[String, AnyRef] = mutable.Map[String, AnyRef]()
+    val confMap: mutable.Map[String, AnyRef] = mutable.Map[String, AnyRef]()
 
     if (config.hasPath(appName)) {
 
-          val confObj = config.getObject(appName)
+      val confObj = config.getObject(appName)
 
-          val itr = confObj.unwrapped().entrySet().iterator()
+      val itr = confObj.unwrapped().entrySet().iterator()
 
-          while (itr.hasNext) {
-            val e = itr.next()
-            confMap.put(e.getKey, e.getValue)
-          }
+      while (itr.hasNext) {
+        val e = itr.next()
+        confMap.put(e.getKey, e.getValue)
+      }
     }
     confMap
   }
 
 
   @unused
-  def getAppName(appName:String): String = config.getString("app.appName")
+  def getAppName(appName: String): String = config.getString("app.appName")
 
   @unused
   def getWarehouseLocation: String = config.getString("app.warehousedir")

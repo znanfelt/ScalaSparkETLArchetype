@@ -9,38 +9,36 @@ import org.apache.log4j.Logger
  *
  */
 
-object WorkflowController{
+object WorkflowController {
 
-    var paramsMap:Map[String, Any] = scala.collection.immutable.Map()
+  val log: Logger = Logger.getLogger(this.getClass.getName)
+  var paramsMap: Map[String, Any] = scala.collection.immutable.Map()
 
-    val log: Logger = Logger.getLogger(this.getClass.getName)
+  def main(args: Array[String]): Unit = {
 
-    private def configureSpark(paramsMap:Map[String, Any]):Unit = {
+    if (args.length == 0) {
 
-        val allParams = paramsMap ++ ConfigUtil.getGlobalConfig(paramsMap.get(StringConstantsUtil.RUNMODE)) ++
-          ConfigUtil.getAppConfig(paramsMap(StringConstantsUtil.WORKFLOW).toString)
-
-        SparkIOUtil.configureSpark(allParams)
-
-        log.debug("Spark is configured")
+    } else {
+      for (arg <- args) {
+        val res = arg.split("=")
+        paramsMap = paramsMap + (res(0) -> res(1))
+      }
     }
 
-    def main(args: Array[String]): Unit = {
+    configureSpark(paramsMap)
 
-        if (args.length == 0) {
+    WorkFlowManager.manageWorkFlow(paramsMap)
+  }
 
-        } else{
-            for (arg <- args) {
-                val res = arg.split("=")
-                paramsMap = paramsMap + (res(0) -> res(1))
-            }
-        }
+  private def configureSpark(paramsMap: Map[String, Any]): Unit = {
 
-        configureSpark(paramsMap)
+    val allParams = paramsMap ++ ConfigUtil.getGlobalConfig(paramsMap.get(StringConstantsUtil.RUNMODE)) ++
+      ConfigUtil.getAppConfig(paramsMap(StringConstantsUtil.WORKFLOW).toString)
 
-        WorkFlowManager.manageWorkFlow(paramsMap)
-    }
+    SparkIOUtil.configureSpark(allParams)
 
+    log.debug("Spark is configured")
+  }
 
 
 }

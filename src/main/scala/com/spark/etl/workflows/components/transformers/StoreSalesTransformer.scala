@@ -1,7 +1,8 @@
 package com.spark.etl.workflows.components.transformers
+
+import com.spark.etl.utils.{TableColumnConstants => TC}
 import org.apache.log4j.Logger
 import org.apache.spark.sql.DataFrame
-import com.spark.etl.utils.{TableColumnConstants=>TC}
 import org.apache.spark.sql.functions._
 
 class StoreSalesTransformer extends TransformTrait {

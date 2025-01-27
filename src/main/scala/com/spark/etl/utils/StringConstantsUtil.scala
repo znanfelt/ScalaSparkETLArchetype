@@ -1,7 +1,5 @@
 package com.spark.etl.utils
 
-import com.spark.etl.workflows.workflow.ItemSalesWorkflow
-
 object StringConstantsUtil {
 
   val WORKFLOW = "workflow"
@@ -12,7 +10,6 @@ object StringConstantsUtil {
   val MASTER = "master"
   val LOCAL = "local"
   val RUNMODE = "runMode"
-
 
 
 }

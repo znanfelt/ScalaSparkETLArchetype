@@ -1,7 +1,7 @@
 package com.spark.etl
 
-import com.spark.etl.workflows.workflow.{ItemSalesWorkflow, StoreSalesWorkflow, WorkFlowTrait}
 import com.spark.etl.utils.{Utils, StringConstantsUtil => StrConst}
+import com.spark.etl.workflows.workflow.{ItemSalesWorkflow, StoreSalesWorkflow, WorkFlowTrait}
 import org.apache.log4j.Logger
 import org.apache.spark.sql.DataFrame
 
@@ -12,29 +12,29 @@ import org.apache.spark.sql.DataFrame
 object WorkFlowManager {
   val log: Logger = Logger.getLogger(this.getClass.getName)
 
-  def manageWorkFlow(paramsMap:Map[String, Any]) : Unit = {
+  def manageWorkFlow(paramsMap: Map[String, Any]): Unit = {
 
-    val workflowInstance:Option[WorkFlowTrait] = paramsMap.get(StrConst.WORKFLOW) match {
+    val workflowInstance: Option[WorkFlowTrait] = paramsMap.get(StrConst.WORKFLOW) match {
       case Some(StrConst.ITEMSALESWORKFLOW) =>
-                              log.debug("Invoking " + StrConst.ITEMSALESWORKFLOW)
-                              Some(ItemSalesWorkflow)
+        log.debug("Invoking " + StrConst.ITEMSALESWORKFLOW)
+        Some(ItemSalesWorkflow)
       case Some(StrConst.STORESALESWORKFLOW) =>
-                              log.debug("Invoking " + StrConst.STORESALESWORKFLOW)
-                              Some(StoreSalesWorkflow)
+        log.debug("Invoking " + StrConst.STORESALESWORKFLOW)
+        Some(StoreSalesWorkflow)
       case Some(x) => log.error("No Workflow implementation available for " + x)
-                      None
+        None
     }
 
     workflowInstance match {
-        case Some(_) => executeFlow(paramsMap, workflowInstance.get)
-        case None => log.error("No Workflow implementation available")
+      case Some(_) => executeFlow(paramsMap, workflowInstance.get)
+      case None => log.error("No Workflow implementation available")
     }
 
   }
 
-  private def executeFlow(paramsMap: Map[String,Any], workflow:WorkFlowTrait) : Unit = {
+  private def executeFlow(paramsMap: Map[String, Any], workflow: WorkFlowTrait): Unit = {
 
-    var resultantDFMap : Map[String,DataFrame] = Map[String,DataFrame]()
+    var resultantDFMap: Map[String, DataFrame] = Map[String, DataFrame]()
 
     val extractorsSet = workflow.extractorsSet
     val transformersSet = workflow.transformersSet
@@ -50,7 +50,7 @@ object WorkFlowManager {
         val result = ext.extract(paramsMap, Some(resultantDFMap))
         result match {
           case None =>
-          case map:Option[Map[String,DataFrame]] => resultantDFMap = resultantDFMap ++ map.get
+          case map: Option[Map[String, DataFrame]] => resultantDFMap = resultantDFMap ++ map.get
         }
       }
     }
@@ -63,7 +63,7 @@ object WorkFlowManager {
     }
 
 
-    loadersSet.foreach{
+    loadersSet.foreach {
       loader => {
         loader.load(paramsMap, resultantDFMap)
       }

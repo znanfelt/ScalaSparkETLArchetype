@@ -5,8 +5,7 @@ import com.spark.etl.workflows.components.loaders.StoreSalesLoader
 import com.spark.etl.workflows.components.transformers.StoreSalesTransformer
 
 
-
-object StoreSalesWorkflow extends WorkFlowTrait{
+object StoreSalesWorkflow extends WorkFlowTrait {
 
   addExtractors(new SalesExtractor, new StoreExtractor)
 

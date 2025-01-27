@@ -15,11 +15,11 @@ trait WorkFlowTrait {
 
   val log: Logger = Logger.getLogger(this.getClass.getName)
 
-  val extractorsSet : mutable.LinkedHashSet[ExtractorTrait] = mutable.LinkedHashSet[ExtractorTrait]()
-  val transformersSet : mutable.LinkedHashSet[TransformTrait] = mutable.LinkedHashSet[TransformTrait]()
-  val loadersSet : mutable.LinkedHashSet[LoaderTrait] = mutable.LinkedHashSet[LoaderTrait]()
+  val extractorsSet: mutable.LinkedHashSet[ExtractorTrait] = mutable.LinkedHashSet[ExtractorTrait]()
+  val transformersSet: mutable.LinkedHashSet[TransformTrait] = mutable.LinkedHashSet[TransformTrait]()
+  val loadersSet: mutable.LinkedHashSet[LoaderTrait] = mutable.LinkedHashSet[LoaderTrait]()
 
-  def addExtractors(extractors: ExtractorTrait *):Unit = {
+  def addExtractors(extractors: ExtractorTrait*): Unit = {
 
     for (ext <- extractors) {
       extractorsSet.add(ext)
@@ -27,7 +27,7 @@ trait WorkFlowTrait {
 
   }
 
-  def addTransformers(transformers: TransformTrait *):Unit = {
+  def addTransformers(transformers: TransformTrait*): Unit = {
 
     for (tran <- transformers) {
       transformersSet.add(tran)
@@ -35,7 +35,7 @@ trait WorkFlowTrait {
 
   }
 
-  def addLoaders(loaders: LoaderTrait *):Unit = {
+  def addLoaders(loaders: LoaderTrait*): Unit = {
 
     for (load <- loaders) {
       loadersSet.add(load)

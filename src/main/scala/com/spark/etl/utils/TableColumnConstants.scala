@@ -3,7 +3,7 @@ package com.spark.etl.utils
 object TableColumnConstants {
 
   val itemNbr = "itemNumber"
-  val itemNm =  "ItemName"
+  val itemNm = "ItemName"
   val itemCost = "ItemCost"
   val manuf = "Manufacturer"
   val itemDesc = "ItemDescription"
