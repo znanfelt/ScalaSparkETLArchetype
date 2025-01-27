@@ -6,11 +6,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="SparkETLArchetype" />
+        <module name="ScalaSparkETLArchetype" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="SparkETLArchetype" target="1.5" />
-    </bytecodeTargetLevel>
+    <bytecodeTargetLevel target="11" />
   </component>
 </project>

@@ -7,7 +7,7 @@ class ItemSalesLoader extends LoaderTrait {
 
   override def load(paramsMap: Map[String, Any], dataFrameMap: Map[String, DataFrame]): Unit = {
 
-    val df = dataFrameMap.get("itemSalesDF").get
+    val df = dataFrameMap("itemSalesDF")
 
     SparkIOUtil.writeOrc(df, SaveMode.Append, TC.itemSalesTable , None)
 

@@ -3,13 +3,14 @@ package com.spark.etl.utils
 import com.typesafe.config.{Config, ConfigFactory}
 import org.apache.log4j.Logger
 
+import scala.annotation.unused
 import scala.collection._
 
 object ConfigUtil {
 
   val config: Config = ConfigFactory.parseResources("sparkConf.conf")
 
-  val logger = Logger.getLogger(this.getClass.getName)
+  private val logger = Logger.getLogger(this.getClass.getName)
 
   def getGlobalConfig(runMode:Option[Any]) : mutable.Map[String, AnyRef] = {
 
@@ -47,8 +48,10 @@ object ConfigUtil {
   }
 
 
+  @unused
   def getAppName(appName:String): String = config.getString("app.appName")
 
+  @unused
   def getWarehouseLocation: String = config.getString("app.warehousedir")
 
 

@@ -5,17 +5,19 @@ import org.apache.log4j.Logger
 import org.apache.spark.sql.{DataFrame, SQLContext, SQLImplicits, SaveMode, SparkSession}
 import com.spark.etl.utils.{StringConstantsUtil => StrConst}
 
+import scala.annotation.unused
+
 
 object SparkIOUtil {
 
-  val log = Logger.getLogger(this.getClass.getName)
+  val log: Logger = Logger.getLogger(this.getClass.getName)
 
-  var spark :SparkSession = null
+  var spark :SparkSession = _
 
   def configureSpark(configMap : Map[String,Any]):Unit={
 
-    val appName = configMap.get(StrConst.WORKFLOW).get.toString
-    val master = configMap.get(StrConst.MASTER).get.toString
+    val appName = configMap(StrConst.WORKFLOW).toString
+    val master = configMap(StrConst.MASTER).toString
 
     val sparkSession = SparkSession.builder().appName(appName).master(master)
 
@@ -51,9 +53,11 @@ object SparkIOUtil {
 
   }
 
-  def getSparkSession():SparkSession = spark
+  @unused
+  def getSparkSession:SparkSession = spark
 
 
+  @unused
   def execute(sql:String):Unit={
     log.debug("Executing SQL = " + sql)
     println("Executing SQL = " + sql)
@@ -68,6 +72,7 @@ object SparkIOUtil {
     }
   }
 
+  @unused
   def fetch(sql:String):DataFrame={
     log.debug("Executing SQL = " + sql)
     println("fetch SQL = " + sql)
@@ -78,17 +83,20 @@ object SparkIOUtil {
     spark.read.option("header", "true").csv(fileName)
   }
 
-  def isTableExists(database:String,tableName:String):Boolean={
+  @unused
+  def isTableExists(database:String, tableName:String):Boolean={
     spark.catalog.tableExists(database + "." + tableName)
 
   }
 
-  def refreshMetaData(schema:String,table:String):Unit={
+  @unused
+  def refreshMetaData(schema:String, table:String):Unit={
     spark.catalog.refreshTable(schema + "." + table)
   }
 
 
 
+  @unused
   def buildTempDF():DataFrame = {
     val rdd = spark.sparkContext.parallelize(List(1,2,3))
     import SparkImplicits._

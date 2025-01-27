@@ -10,35 +10,29 @@ import org.apache.spark.sql.DataFrame
  */
 
 object WorkFlowManager {
-
-  val log = Logger.getLogger(this.getClass.getName)
+  val log: Logger = Logger.getLogger(this.getClass.getName)
 
   def manageWorkFlow(paramsMap:Map[String, Any]) : Unit = {
 
     val workflowInstance:Option[WorkFlowTrait] = paramsMap.get(StrConst.WORKFLOW) match {
-
       case Some(StrConst.ITEMSALESWORKFLOW) =>
                               log.debug("Invoking " + StrConst.ITEMSALESWORKFLOW)
                               Some(ItemSalesWorkflow)
-
       case Some(StrConst.STORESALESWORKFLOW) =>
                               log.debug("Invoking " + StrConst.STORESALESWORKFLOW)
                               Some(StoreSalesWorkflow)
-
       case Some(x) => log.error("No Workflow implementation available for " + x)
                       None
     }
 
     workflowInstance match {
-
-        case Some(x) => executeFlow(paramsMap, workflowInstance.get)
-
+        case Some(_) => executeFlow(paramsMap, workflowInstance.get)
         case None => log.error("No Workflow implementation available")
     }
 
   }
 
-  def executeFlow(paramsMap: Map[String,Any], workflow:WorkFlowTrait) : Unit = {
+  private def executeFlow(paramsMap: Map[String,Any], workflow:WorkFlowTrait) : Unit = {
 
     var resultantDFMap : Map[String,DataFrame] = Map[String,DataFrame]()
 
@@ -51,7 +45,7 @@ object WorkFlowManager {
 
     log.info("Running " + paramsMap.get(StrConst.WORKFLOW) + " having " + printString)
 
-    extractorsSet.map {
+    extractorsSet.foreach {
       ext => {
         val result = ext.extract(paramsMap, Some(resultantDFMap))
         result match {
@@ -61,8 +55,7 @@ object WorkFlowManager {
       }
     }
 
-    transformersSet.map {
-
+    transformersSet.foreach {
       trans => {
         val result = trans.transform(paramsMap, resultantDFMap)
         resultantDFMap = resultantDFMap ++ result
@@ -70,8 +63,7 @@ object WorkFlowManager {
     }
 
 
-    loadersSet.map{
-
+    loadersSet.foreach{
       loader => {
         loader.load(paramsMap, resultantDFMap)
       }

@@ -13,14 +13,14 @@ object WorkflowController{
 
     var paramsMap:Map[String, Any] = scala.collection.immutable.Map()
 
-    val log = Logger.getLogger(this.getClass.getName)
+    val log: Logger = Logger.getLogger(this.getClass.getName)
 
-    def configureSpark(paramsMap:Map[String, Any]):Unit = {
+    private def configureSpark(paramsMap:Map[String, Any]):Unit = {
 
         val allParams = paramsMap ++ ConfigUtil.getGlobalConfig(paramsMap.get(StringConstantsUtil.RUNMODE)) ++
-          ConfigUtil.getAppConfig(paramsMap.get(StringConstantsUtil.WORKFLOW).get.toString)
+          ConfigUtil.getAppConfig(paramsMap(StringConstantsUtil.WORKFLOW).toString)
 
-        SparkIOUtil.configureSpark(allParams);
+        SparkIOUtil.configureSpark(allParams)
 
         log.debug("Spark is configured")
     }

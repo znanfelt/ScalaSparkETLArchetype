@@ -1,6 +1,5 @@
 package com.spark.etl.workflows.components.transformers
 
-import com.spark.etl.utils.SparkIOUtil
 import org.apache.log4j.Logger
 import org.apache.spark.sql.DataFrame
 import com.spark.etl.utils.{TableColumnConstants=>TC}
@@ -13,8 +12,8 @@ class ItemSalesTransformer extends TransformTrait {
 
     val log = Logger.getLogger(this.getClass.getName)
 
-    val itemDF = dataFrameMap.get("itemDF").get
-    val salesDF = dataFrameMap.get("salesDF").get
+    val itemDF = dataFrameMap("itemDF")
+    val salesDF = dataFrameMap("salesDF")
 
     val salesItemExpr = itemDF.col(TC.itemNbr) === salesDF.col(TC.itemNbr)
 
